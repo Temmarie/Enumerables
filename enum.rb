@@ -56,4 +56,38 @@ module Enumerable
     false
   end
 
+  def my_count(item = nil)
+    counter = 0
+    if block_given?
+      my_each { |n| return counter += 1 if yield(n) }
+    elsif item
+      my_each { |n| return counter += 1 if n == item }
+    else
+      counter = size
+    end
+    counter
+  end
+
+  def my_map(proc = nil)
+    return to_enum(:my_map) unless block_given?
+
+    mapped = []
+    if proc.nil?
+      my_each { |n| mapped << yield(n) }
+    elsif block_given? && proc
+      my_each { |n| mapped << proc.call(n) }
+    end
+    mapped
+  end
+
+  def my_inject(arg = 0)
+    return nil unless block_given?
+
+    my_each { |x| arg = yield(arg, x) }
+    arg
+  end
+
+  def multiply_els(arr)
+    arr.my_inject { |multiply, n| multiply * n }
+  end
 end
