@@ -23,5 +23,37 @@ module Enumerable
     array
   end
 
+  def my_all?(arr = nil)
+    if block_given?
+      my_each { |n| return false unless yield n }
+    elsif arr
+      my_each { |n| return false unless checker(n, arr) }
+    else
+      my_each { |n| return false unless n }
+    end
+    true
+  end
+
+  def my_any?(arr = nil)
+    if block_given?
+      my_each { |n| return true unless yield n }
+    elsif arr
+      my_each { |n| return true unless checker(n, arr) }
+    else
+      my_each { |n| return true unless n }
+    end
+    false
+  end
+
+  def my_none?(arr = nil)
+    if !block_given?
+      my_each { |n| return true unless yield n }
+    elsif arr
+      my_each { |n| return false unless checker(n, arr) }
+    else
+      my_each { |n| return false unless n }
+    end
+    false
+  end
 
 end
