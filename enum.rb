@@ -42,11 +42,11 @@ module Enumerable
     condition = false
     my_each do |index|
       if block_given?
-        my_each { |index| condition = true if yield(index) }
+        condition = true if yield(index)
       elsif arr.nil?
-        my_each { |index| condition = true unless index }
+        condition = true unless index
       elsif arr === index
-        my_each { |_index| condition = true }
+        condition = true
       end
     end
     condition
@@ -56,9 +56,9 @@ module Enumerable
     condition = true
     my_each do |index|
       if block_given?
-        my_each { |index| condition = false if yield index }
+        condition = false if yield index
       elsif arr.nil?
-        my_each { |index| condition = false if index }
+        condition = false if index
       elsif arr === index
         my_each { |_index| condition = false }
       end
