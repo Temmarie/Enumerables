@@ -28,12 +28,16 @@ module Enumerable
     array
   end
 
-  def my_all?(_arr = nil)
+  def my_all?(arr = nil)
     condition = true
-    if block_given?
-      my_each { |index| condition = false unless yield(index) }
-    else
-      my_each { |index| condition = false if index.nil? || index == false }
+    my_each do |index|
+      if block_given?
+        condition = false unless yield(index)
+      elsif arr.nil?
+        condition = false unless index
+      else
+        condition = false unless arr === index
+      end
     end
     condition
   end
@@ -44,7 +48,7 @@ module Enumerable
       if block_given?
         condition = true if yield(index)
       elsif arr.nil?
-        condition = true unless index
+        condition = true if index
       elsif arr === index
         condition = true
       end
