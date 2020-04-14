@@ -1,16 +1,15 @@
+# rubocop:disable Metrics/ModuleLength
 module Enumerable
-
   def my_each
     return to_enum(:my_each) unless block_given?
 
-    n = 0
+    index = 0
     array = to_a
-    while n < array.length
-      yield(array[n])
-      n += 1
+    while index < array.length
+      yield(array[index])
+      index += 1
     end
   end
-
 
   def my_each_with_index
     return to_enum(:my_each_wth_index) unless block_given?
@@ -25,58 +24,54 @@ module Enumerable
     return to_enum if block_given? == false
 
     array = []
-    my_each { |n| array.push(n) if yield(n) }
+    my_each { |index| array.push(index) if yield(index) }
     array
   end
 
-  def my_all?(arr = nil)
-
-    condition = true 
+  def my_all?(_arr = nil)
+    condition = true
     if block_given?
-      my_each { |n| condition = false unless yield n }
+      my_each { |index| condition = false unless yield(index) }
     else
-      my_each { |n| condition = false if n.nil? || n == false }
+      my_each { |index| condition = false if index.nil? || index == false }
     end
     condition
   end
 
   def my_any?(arr = nil)
-
     condition = false
-    my_each do |n|
+    my_each do |index|
       if block_given?
-        my_each { |n| condition = true if yield n }
+        my_each { |index| condition = true if yield(index) }
       elsif arr.nil?
-        my_each { |n| condition = true unless n }
-      elsif arr === n
-        my_each { |n| condition = true }
+        my_each { |index| condition = true unless index }
+      elsif arr === index
+        my_each { |_index| condition = true }
       end
     end
-      condition
+    condition
   end
 
   def my_none?(arr = nil)
-
     condition = true
-    my_each do |n|
-  
+    my_each do |index|
       if block_given?
-        my_each { |n| condition = false if yield n }
+        my_each { |index| condition = false if yield index }
       elsif arr.nil?
-        my_each { |n| condition = false if n }
-      elsif arr === n
-        my_each { |n| condition = false }
+        my_each { |index| condition = false if index }
+      elsif arr === index
+        my_each { |_index| condition = false }
       end
     end
-      condition
+    condition
   end
 
   def my_count(item = nil)
     counter = 0
     if block_given?
-      my_each { |n| counter += 1 if yield(n) }
+      my_each { |index| counter += 1 if yield(index) }
     elsif item
-      my_each { |n| counter += 1 if n == item }
+      my_each { |index| counter += 1 if index == item }
     else
       counter = length
     end
@@ -88,9 +83,9 @@ module Enumerable
 
     mapped = []
     if proc.nil?
-      my_each { |n| mapped << yield(n) }
+      my_each { |index| mapped << yield(index) }
     elsif block_given? && proc
-      my_each { |n| mapped << proc.call(n) }
+      my_each { |index| mapped << proc.call(index) }
     end
     mapped
   end
@@ -99,24 +94,25 @@ module Enumerable
     array = to_a
     if init.nil?
       result = array[0]
-      array[1..-1].my_each { |n| result = yield(result, n) }
+      array[1..-1].my_each { |index| result = yield(result, index) }
     elsif block_given?
-        result = init
-        array.my_each { |n| result = yield(result, n) }
+      result = init
+      array.my_each { |index| result = yield(result, index) }
     elsif init && symbol
       result = init
-      array.my_each { |n| result = result.send(symbol, n) }
+      array.my_each { |index| result = result.send(symbol, index) }
     elsif init.is_a? Integer
       result = init
-      array.my_each { |n| result += n }
+      array.my_each { |index| result += index }
     else
       result = array[0]
-      array[1..-1].my_each { |n| result = result.send(init, n) }
+      array[1..-1].my_each { |index| result = result.send(init, index) }
     end
     result
   end
 
   def multiply_els(arr)
-    arr.my_inject { |multiply, n| multiply * n }
+    arr.my_inject { |multiply, index| multiply * index }
   end
 end
+# rubocop:enable Metrics/ModuleLength

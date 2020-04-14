@@ -23,6 +23,8 @@ Style/Documentation:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
+Style/CaseEquality:
+  Enabled: false
 Style/EachForSimpleLoop:
   Enabled: false
 Style/AndOr:
@@ -31,6 +33,13 @@ Style/DefWithParentheses:
   Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
+Style/HashEachMethods: 
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+
 
 Layout/HashAlignment:
   EnforcedColonStyle: key
@@ -39,3 +48,8 @@ Layout/ExtraSpacing:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
+
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
