@@ -1,10 +1,16 @@
 module Enumerable
+
   def my_each
     return to_enum(:my_each) unless block_given?
 
-    length.times { |n| yield(self[n]) }
-    self
+    n = 0
+    array = to_a
+    while n < array.length
+      yield(array[n])
+      n += 1
+    end
   end
+
 
   def my_each_with_index
     return to_enum(:my_each_wth_index) unless block_given?
@@ -24,46 +30,55 @@ module Enumerable
   end
 
   def my_all?(arr = nil)
+
+    condition = true 
     if block_given?
-      my_each { |n| return false unless yield n }
-    elsif arr
-      my_each { |n| return false unless checker(n, arr) }
+      my_each { |n| condition = false unless yield n }
     else
-      my_each { |n| return false unless n }
+      my_each { |n| condition = false if n.nil? || n == false }
     end
-    true
+    condition
   end
 
   def my_any?(arr = nil)
-    if block_given?
-      my_each { |n| return true unless yield n }
-    elsif arr
-      my_each { |n| return true unless checker(n, arr) }
-    else
-      my_each { |n| return true unless n }
+
+    condition = false
+    my_each do |n|
+      if block_given?
+        my_each { |n| condition = true if yield n }
+      elsif arr.nil?
+        my_each { |n| condition = true unless n }
+      elsif arr === n
+        my_each { |n| condition = true }
+      end
     end
-    false
+      condition
   end
 
   def my_none?(arr = nil)
-    if !block_given?
-      my_each { |n| return true unless yield n }
-    elsif arr
-      my_each { |n| return false unless checker(n, arr) }
-    else
-      my_each { |n| return false unless n }
+
+    condition = true
+    my_each do |n|
+  
+      if block_given?
+        my_each { |n| condition = false if yield n }
+      elsif arr.nil?
+        my_each { |n| condition = false if n }
+      elsif arr === n
+        my_each { |n| condition = false }
+      end
     end
-    false
+      condition
   end
 
   def my_count(item = nil)
     counter = 0
     if block_given?
-      my_each { |n| return counter += 1 if yield(n) }
+      my_each { |n| counter += 1 if yield(n) }
     elsif item
-      my_each { |n| return counter += 1 if n == item }
+      my_each { |n| counter += 1 if n == item }
     else
-      counter = size
+      counter = length
     end
     counter
   end
@@ -80,7 +95,7 @@ module Enumerable
     mapped
   end
 
-  def my_inject(arg = 0)
+  def my_inject(arg = nil)
     return nil unless block_given?
 
     my_each { |x| arg = yield(arg, x) }

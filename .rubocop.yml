@@ -14,10 +14,6 @@ Metrics/AbcSize:
   Max: 50
 Metrics/ClassLength:
   Max: 150
-Metrics/CyclomaticComplexity:
-  Max: 100
-Metrics/PerceivedComplexity:
-  Max: 100
 Metrics/BlockLength:
   ExcludedMethods: ['describe']
   Max: 30
@@ -33,8 +29,6 @@ Style/AndOr:
   Enabled: false
 Style/DefWithParentheses:
   Enabled: false
-Style/CaseEquality:
-  Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
 
@@ -45,14 +39,3 @@ Layout/ExtraSpacing:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
-
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
