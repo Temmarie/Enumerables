@@ -225,12 +225,13 @@ end
 # puts
 
 
-def my_inject(arg = 0)
-  return nil unless block_given?
+
+def my_inject(arg = nil)
 
   my_each { |x| arg = yield(arg, x) }
   arg
 end
+
 
 #9. my_inject
 puts "my_inject"
