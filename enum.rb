@@ -95,11 +95,25 @@ module Enumerable
     mapped
   end
 
-  def my_inject(arg = nil)
-    return nil unless block_given?
-
-    my_each { |x| arg = yield(arg, x) }
-    arg
+  def my_inject(init = nil, symbol = nil)
+    array = to_a
+    if init.nil?
+      result = array[0]
+      array[1..-1].my_each { |n| result = yield(result, n) }
+    elsif block_given?
+        result = init
+        array.my_each { |n| result = yield(result, n) }
+    elsif init && symbol
+      result = init
+      array.my_each { |n| result = result.send(symbol, n) }
+    elsif init.is_a? Integer
+      result = init
+      array.my_each { |n| result += n }
+    else
+      result = array[0]
+      array[1..-1].my_each { |n| result = result.send(init, n) }
+    end
+    result
   end
 
   def multiply_els(arr)
